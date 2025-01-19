@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Prediction Form</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: rgba(0, 0, 0, 0.6) url('https://i.postimg.cc/9QyQ0Fkn/DALL-E-2024-12-21-17-01-38-A-visually-engaging-background-image-for-a-crop-recommendation-website.webp') no-repeat center;
+            background-size: cover;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 60px auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            font-size: 34px;
+            font-weight: 700;
+            color: #4a8a70; /* Matching with green tones in the image */
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-section {
+            padding: 20px 0;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #355a47; /* Dark green for better contrast */
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #91c6a1; /* Light green inspired by the background */
+            border-radius: 5px;
+            outline: none;
+            transition: opacity 0.3s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid #2e6e56; /* Deep green */
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid #2e6e56;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        input[type="range"]:hover::-webkit-slider-thumb,
+        input[type="range"]:hover::-moz-range-thumb {
+            background: #4a8a70; /* Hover effect to match the header */
+        }
+
+        .result {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .prediction-box {
+            background: rgba(245, 248, 247, 0.95);
+            padding: 20px;
+            margin: 15px auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .prediction-box h3 {
+            color: #355a47;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .prediction-box p {
+            font-size: 16px;
+            font-weight: 500;
+            color: #4a8a70;
+        }
+
+        input[type="submit"] {
+            background: linear-gradient(135deg, #4a8a70, #355a47);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 8px;
+            transition: background 0.3s ease, transform 0.2s;
+        }
+
+        input[type="submit"]:hover {
+            background: linear-gradient(135deg, #355a47, #2e6e56);
+            transform: scale(1.02);
+        }
+
+        .slider-container span {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .form-group div {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 5px;
+        }
+
+        /* Mobile Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header {
+                font-size: 28px;
+            }
+
+            label {
+                font-size: 16px;
+            }
+
+            .prediction-box {
+                padding: 15px;
+            }
+
+            input[type="submit"] {
+                font-size: 16px;
+            }
+        }
+    </style>
+    <script>
+        function updateValue(labelId, value) {
+            document.getElementById(labelId).innerText = value;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            Crop Recommendations Model
+        </div>
+        <div class="form-section">
+            <form action="/predict" method="POST">
+                <!-- Nitrogen -->
+                <div class="form-group">
+                    <label for="Nitrogen">Nitrogen:</label>
+                    <div class="slider-container">
+                        <span>0</span>
+                        <input type="range" id="Nitrogen" name="Nitrogen" min="0" max="140" step="1"
+                               oninput="updateValue('NitrogenValue', this.value)" aria-label="Nitrogen"
+                               value="{{ Nitrogen }}">
+                        <span>140</span>
+                    </div>
+                    <div>Value: <span id="NitrogenValue">{{ Nitrogen }}</span></div>
+                </div>
+
+                <!-- Phosphorus -->
+                <div class="form-group">
+                    <label for="Phosphorus">Phosphorus:</label>
+                    <div class="slider-container">
+                        <span>5</span>
+                        <input type="range" id="Phosphorus" name="Phosphorus" min="5" max="145" step="1"
+                               oninput="updateValue('PhosphorusValue', this.value)" aria-label="Phosphorus"
+                               value="{{ Phosphorus }}">
+                        <span>145</span>
+                    </div>
+                    <div>Value: <span id="PhosphorusValue">{{ Phosphorus }}</span></div>
+                </div>
+
+                <!-- Potassium -->
+                <div class="form-group">
+                    <label for="Potassium">Potassium:</label>
+                    <div class="slider-container">
+                        <span>5</span>
+                        <input type="range" id="Potassium" name="Potassium" min="5" max="205" step="1"
+                               oninput="updateValue('PotassiumValue', this.value)" aria-label="Potassium"
+                               value="{{ Potassium }}">
+                        <span>205</span>
+                    </div>
+                    <div>Value: <span id="PotassiumValue">{{ Potassium }}</span></div>
+                </div>
+
+                <!-- Temperature -->
+                <div class="form-group">
+                    <label for="Temperature">Temperature (°C):</label>
+                    <div class="slider-container">
+                        <span>8.83</span>
+                        <input type="range" id="Temperature" name="Temperature" min="8.83" max="43.68" step="0.01"
+                               oninput="updateValue('TemperatureValue', this.value)" aria-label="Temperature"
+                               value="{{ Temperature }}">
+                        <span>43.68</span>
+                    </div>
+                    <div>Value: <span id="TemperatureValue">{{ Temperature }}</span></div>
+                </div>
+
+                <!-- Humidity -->
+                <div class="form-group">
+                    <label for="Humidity">Humidity (%):</label>
+                    <div class="slider-container">
+                        <span>14.26</span>
+                        <input type="range" id="Humidity" name="Humidity" min="14.26" max="99.98" step="0.01"
+                               oninput="updateValue('HumidityValue', this.value)" aria-label="Humidity"
+                               value="{{ Humidity }}">
+                        <span>99.98</span>
+                    </div>
+                    <div>Value: <span id="HumidityValue">{{ Humidity }}</span></div>
+                </div>
+
+                <!-- pH -->
+                <div class="form-group">
+                    <label for="pH">pH:</label>
+                    <div class="slider-container">
+                        <span>3.50</span>
+                        <input type="range" id="pH" name="pH" min="3.50" max="9.94" step="0.01"
+                               oninput="updateValue('pHValue', this.value)" aria-label="pH"
+                               value="{{ pH }}">
+                        <span>9.94</span>
+                    </div>
+                    <div>Value: <span id="pHValue">{{ pH }}</span></div>
+                </div>
+
+                <!-- Annual Rainfall -->
+                <div class="form-group">
+                    <label for="Annual_rainfall">Annual Rainfall (mm):</label>
+                    <div class="slider-container">
+                        <span>20.21</span>
+                        <input type="range" id="Annual_rainfall" name="Annual_rainfall" min="20.21" max="298.56" step="0.01"
+                               oninput="updateValue('AnnualRainfallValue', this.value)" aria-label="Annual Rainfall"
+                               value="{{ Annual_rainfall }}">
+                        <span>298.56</span>
+                    </div>
+                    <div>Value: <span id="AnnualRainfallValue">{{ Annual_rainfall }}</span></div>
+                </div>
+
+                <!-- Submit Button -->
+                <input type="submit" value="Predict">
+
+                <!-- Prediction Results Section -->
+                <div class="result">
+                    <div class="prediction-box" id="RandomForestClassifierResult">
+                        <h3>RandomForestClassifier Prediction</h3>
+                        <p>Class: {{ result['RandomForestClassifier'] }}</p>
+                    </div>
+                    <div class="prediction-box" id="GaussianNBResult">
+                        <h3>GaussianNB Prediction</h3>
+                        <p>Class: {{ result['GaussianNB'] }}</p>
+                    </div>
+                    <div class="prediction-box" id="ExtraTreesClassifierResult">
+                        <h3>ExtraTreesClassifier Prediction</h3>
+                        <p>Class: {{ result['ExtraTreesClassifier'] }}</p>
+                    </div>
+                    <div class="prediction-box" id="DecisionTreeClassifierResult">
+                        <h3>DecisionTreeClassifier Prediction</h3>
+                        <p>Class: {{ result['DecisionTreeClassifier'] }}</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
